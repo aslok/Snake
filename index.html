@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Snake v2</title>
+    <style>
+      body{
+        margin:0;
+        width:100%;
+        padding-top:200px;
+        text-align:center;
+        color:blue;
+      }
+    </style>
+    <style>
+      .snake_body, .snake_apple{
+        position:absolute;
+        background-color:green;
+      }
+      .snake_apple{
+        background-color:red;
+      }
+    </style>
+    <script type="text/javascript" src="jquery.min.js"></script>
+    <script type="text/javascript" src="snake.min.js"></script>
+    <script type="text/javascript">
+
+      // Загружаем jquery
+      $(init_jquery);
+
+      // Вычисляем высоту экрана
+      function calc_height(){
+        var ua = navigator.userAgent.toLowerCase();
+        var isOpera = (ua.indexOf('opera')  > -1);
+        var isIE = (!isOpera && ua.indexOf('msie') > -1);
+
+        function getDocumentHeight(){
+          return Math.max(document.compatMode != 'CSS1Compat' ? document.body.scrollHeight : document.documentElement.scrollHeight, getViewportHeight());
+        }
+
+        function getViewportHeight(){
+          return ((document.compatMode || isIE) && !isOpera) ? (document.compatMode == 'CSS1Compat') ? document.documentElement.clientHeight : document.body.clientHeight : (document.parentWindow || document.defaultView).innerHeight;
+        }
+        return (getDocumentHeight());
+      }
+
+      // Устанавливаем высоту бади по высоте экрана
+      function set_height(){
+        $("body").
+          css("height", calc_height() - parseInt($("body").css("padding-top")) + "px").
+          css("width", "100%");
+      }
+
+      // Инициализация тригеров и запуск контроллера змеи
+      function init_jquery(){
+        $(document).
+          ready(function (){
+                  set_height();
+                });
+        $("body").
+          html("Начать игру").
+          click(function (){
+                  $(this).
+                    unbind("click").
+                    css("padding-top", "0px").
+                    css("height", calc_height() + "px").
+                    html("");
+                  new Snake({
+                    object: "body",
+                    size: 30,
+                    step_time: 110
+                  });
+                }).
+          mouseover(function (){
+                      $(this).
+                        css("text-decoration", "underline");
+                    }).
+          mouseout(function (){
+                      $(this).
+                        css("text-decoration", "none");
+                   });
+        $(window).
+          resize(set_height);
+      }
+
+      //////////////////////////////////////////////////////////////////////////
+    </script>
+  </head>
+  <body></body>
+</html>
